@@ -68,8 +68,9 @@ class HistoricalData {
         try {
             const newData = await this.gatherData();
             await this.saveDataToDatabase(newData);
-            const deletedInfo = await this.deleteOldData();
-            global.logger.info(`Class - HistoricalData : Completed a cycle - ${newData.length} new records and ${deletedInfo} records deleted`)
+            // const deletedInfo = await this.deleteOldData();
+            // global.logger.info(`Class - HistoricalData : Completed a cycle - ${newData.length} new records and ${deletedInfo} records deleted`)
+            global.logger.info(`Class - HistoricalData : Completed a cycle - ${newData.length} new records`)
         } catch (error) {
             global.logger.info(error)
         }
