@@ -74,6 +74,7 @@ function drawLineChart(dataTitles, dataArr, dataLabels, elementId) {
             tooltips: {
                 mode: 'index',
                 intersect: false,
+                itemSort: (a,b) => b.yLabel - a.yLabel
             },
             hover: {
                 mode: 'nearest',

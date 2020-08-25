@@ -52,6 +52,12 @@ $(document).ready(async () => {
         const newKills = parseInt(playerData[playerData.length - 1].kills)
         const killsDifference = newKills - oldKills
 
+        // if you didn't kill anyone in the past week, you are omitted from
+        // the charts
+        if(killsDifference === 0) {
+            continue
+        }
+
         const oldScore = parseInt(playerData[0].score);
         const newScore = parseInt(playerData[playerData.length - 1].score)
         const scoreDifference = newScore - oldScore
@@ -83,7 +89,19 @@ $(document).ready(async () => {
             steam: sortedByScore[index].steamId
         });
         topScoreNames.push(runnerUpPlayer.name)
-        topScoreData.push(groupedData[runnerUpPlayer.steam].map(d => d.score));
+
+        const scoreDeltas =
+            groupedData[runnerUpPlayer.steam].map((d,index,array) => {
+                if(index === 0) {
+                    return 0;
+                }
+                else {
+                    return d.score - array[index -1].score;
+                }
+            });
+
+        topScoreData.push(scoreDeltas);
+
         $("#score-inc ol").append(`<li><a href="/player/${runnerUpPlayer.id}"><span class="tab">${runnerUpPlayer.name}</span></a> +${sortedByScore[index].scoreDifference} </li>`);
     }
 
@@ -92,7 +110,19 @@ $(document).ready(async () => {
             steam: sortedByKills[index].steamId
         });
         topKillsNames.push(runnerUpPlayer.name)
-        topKillsData.push(groupedData[runnerUpPlayer.steam].map(d => d.kills));
+
+        const killsDeltas =
+            groupedData[runnerUpPlayer.steam].map((d,index,array) => {
+                if(index === 0) {
+                    return 0;
+                }
+                else {
+                    return d.kills - array[index -1].kills;
+                }
+            });
+
+        topKillsData.push(killsDeltas);
+
         $("#kills-inc ol").append(`<li><a href="/player/${runnerUpPlayer.id}"><span class="tab">${runnerUpPlayer.name}</span></a> +${sortedByKills[index].killsDifference} </li>`);
     }
 
